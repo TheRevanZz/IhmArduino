@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://c2q3kqibp4ap6"]
+
+[ext_resource type="Script" uid="uid://c0rw256damo8t" path="res://main/hmi.gd" id="1_hmi"]
+[ext_resource type="Script" uid="uid://s8nadp3ijfus" path="res://main/tile_scroll.gd" id="2_c651c"]
+[ext_resource type="Script" uid="uid://dj5a847xp3wd6" path="res://main/tile_grid.gd" id="2_pjrb6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c651c"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
+[node name="Hmi" type="Control" unique_id=493490949]
+custom_maximum_size = Vector2(720, 720)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hmi")
+
+[node name="TileScroll" type="ScrollContainer" parent="." unique_id=1615379560]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(704, 704)
+custom_maximum_size = Vector2(704, 704)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_c651c")
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+script = ExtResource("2_c651c")
+
+[node name="TileGrid" type="Container" parent="TileScroll" unique_id=1227576493]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("2_pjrb6")
+rows = 2
+spacing = Vector2(16, 16)

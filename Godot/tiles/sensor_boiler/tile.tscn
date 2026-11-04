@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://cwge38rkb8axb"]
+
+[ext_resource type="StyleBox" uid="uid://t0n8yj0takmp" path="res://style/sbf_tile.tres" id="1_lf8ud"]
+[ext_resource type="Script" uid="uid://yggjqj7t73j1" path="res://tiles/sensor_boiler/tile.gd" id="2_y03qy"]
+[ext_resource type="Texture2D" uid="uid://c0rtnopcyn7ns" path="res://tiles/sensor_boiler/heart(2).png" id="3_conwk"]
+[ext_resource type="Texture2D" uid="uid://cngcot67qdg6b" path="res://tiles/sensor_boiler/wifi.png" id="4_bq384"]
+[ext_resource type="FontFile" uid="uid://dy2aoacovd7nf" path="res://tiles/sensor_boiler/SpaceMono-Bold.ttf" id="5_bq384"]
+[ext_resource type="Script" uid="uid://cckwr06504sfp" path="res://core/state_icon.gd" id="5_mn2ah"]
+[ext_resource type="FontFile" uid="uid://cgmdfv1y5xbjs" path="res://tiles/sensor_boiler/SpaceMono-Regular.ttf" id="7_f7tlc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lbf3d"]
+content_margin_bottom = 1.0
+
+[node name="TileSensorDemo" type="Panel" unique_id=304170558]
+custom_minimum_size = Vector2(336, 336)
+custom_maximum_size = Vector2(336, 336)
+offset_right = 360.0
+offset_bottom = 240.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("1_lf8ud")
+script = ExtResource("2_y03qy")
+metadata/_custom_type_script = "uid://csgbx3264kcel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=862181495]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 11.0
+offset_right = 320.0
+offset_bottom = 59.0
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1467322133]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bq384")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxEmpty_lbf3d")
+text = "SENSOR BOILER"
+vertical_alignment = 1
+visible_characters_behavior = 1
+
+[node name="ConnectedIcon" type="TextureRect" parent="HBoxContainer" unique_id=31549510]
+unique_name_in_owner = true
+modulate = Color(0.23921569, 0.6, 0.28627452, 1)
+custom_maximum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("4_bq384")
+script = ExtResource("5_mn2ah")
+state = false
+_color_on = Color(0.23921569, 0.6, 0.28627452, 1)
+_color_off = Color(0.14, 0.14, 0.14, 1)
+metadata/_custom_type_script = "uid://cckwr06504sfp"
+
+[node name="HeartbeatIcon" type="TextureRect" parent="HBoxContainer" unique_id=224637191]
+unique_name_in_owner = true
+custom_maximum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("3_conwk")
+script = ExtResource("5_mn2ah")
+state = false
+_color_on = Color(0.6, 0.23921569, 0.23921569, 1)
+_color_off = Color(0.14, 0.14, 0.14, 1)
+metadata/_custom_type_script = "uid://cckwr06504sfp"
+
+[node name="IDLabel" type="Label" parent="." unique_id=614588024]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 51.0
+offset_right = 320.0
+offset_bottom = 83.0
+theme_override_fonts/font = ExtResource("7_f7tlc")
+theme_override_font_sizes/font_size = 20
+text = "node_id: ∅"
+
+[node name="CounterLabel" type="Label" parent="." unique_id=1552096599]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 88.0
+offset_right = 320.0
+offset_bottom = 120.0
+theme_override_fonts/font = ExtResource("7_f7tlc")
+theme_override_font_sizes/font_size = 20
+text = "Compteur : 1"

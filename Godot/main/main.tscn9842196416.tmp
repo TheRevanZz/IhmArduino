@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://c2q3kqibp4ap6"]
+
+[ext_resource type="Script" uid="uid://c0rw256damo8t" path="res://main/hmi.gd" id="1_hmi"]
+[ext_resource type="Script" uid="uid://s8nadp3ijfus" path="res://main/scroll_container.gd" id="2_c651c"]
+[ext_resource type="Script" uid="uid://dj5a847xp3wd6" path="res://main/tile_grid_container.gd" id="2_pjrb6"]
+[ext_resource type="PackedScene" uid="uid://dfep8kucgqh4h" path="res://tiles/sensor_a/tile.tscn" id="3_xwkvk"]
+
+[node name="Hmi" type="Control" unique_id=493490949]
+custom_maximum_size = Vector2(720, 720)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hmi")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=286280707]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Content" type="VBoxContainer" parent="Margin" unique_id=1212862339]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TopBar" type="HBoxContainer" parent="Margin/Content" unique_id=419370768]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Margin/Content/TopBar" unique_id=1237790083]
+layout_mode = 2
+text = "MPS"
+
+[node name="PortSelect" type="OptionButton" parent="Margin/Content/TopBar" unique_id=745687773]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+custom_maximum_size = Vector2(360, -1)
+layout_mode = 2
+
+[node name="RefreshButton" type="Button" parent="Margin/Content/TopBar" unique_id=1288016045]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Actualiser"
+
+[node name="ConnectButton" type="Button" parent="Margin/Content/TopBar" unique_id=856421950]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Connecter"
+
+[node name="StatusLabel" type="Label" parent="Margin/Content/TopBar" unique_id=1045240641]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Déconnecté"
+horizontal_alignment = 2
+
+[node name="TileScroll" type="ScrollContainer" parent="Margin/Content" unique_id=2097583129]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="TileGrid" type="HFlowContainer" parent="Margin/Content/TileScroll" unique_id=1996746321]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+
+[node name="LogText" type="RichTextLabel" parent="Margin/Content" unique_id=2067099304]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+bbcode_enabled = true
+scroll_following = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1615379560]
+custom_minimum_size = Vector2(688, 688)
+custom_maximum_size = Vector2(688, 688)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+script = ExtResource("2_c651c")
+
+[node name="TileGridContainer" type="Container" parent="ScrollContainer" unique_id=1227576493]
+layout_mode = 2
+script = ExtResource("2_pjrb6")
+rows = 2
+spacing = Vector2(16, 16)
+
+[node name="Tile" parent="ScrollContainer/TileGridContainer" unique_id=32853759 instance=ExtResource("3_xwkvk")]
+layout_mode = 2
+
+[node name="Tile2" parent="ScrollContainer/TileGridContainer" unique_id=1251816562 instance=ExtResource("3_xwkvk")]
+layout_mode = 2
+
+[node name="Tile3" parent="ScrollContainer/TileGridContainer" unique_id=413503433 instance=ExtResource("3_xwkvk")]
+layout_mode = 2
+
+[node name="Tile4" parent="ScrollContainer/TileGridContainer" unique_id=968220323 instance=ExtResource("3_xwkvk")]
+layout_mode = 2
+
+[node name="Tile5" parent="ScrollContainer/TileGridContainer" unique_id=763193781 instance=ExtResource("3_xwkvk")]
+layout_mode = 2
+
+[node name="Tile6" parent="ScrollContainer/TileGridContainer" unique_id=1708829882 instance=ExtResource("3_xwkvk")]
+layout_mode = 2
+
+[node name="Tile7" parent="ScrollContainer/TileGridContainer" unique_id=1609904603 instance=ExtResource("3_xwkvk")]
+layout_mode = 2
+
+[node name="Tile8" parent="ScrollContainer/TileGridContainer" unique_id=1879427034 instance=ExtResource("3_xwkvk")]
+layout_mode = 2

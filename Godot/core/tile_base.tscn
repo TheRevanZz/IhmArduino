@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b14itcy0hwg26"]
+
+[ext_resource type="StyleBox" uid="uid://t0n8yj0takmp" path="res://style/sbf_tile.tres" id="1_8g6yu"]
+[ext_resource type="Script" uid="uid://csgbx3264kcel" path="res://core/tile.gd" id="1_tile"]
+
+[node name="Tile" type="Panel" unique_id=304170558]
+custom_minimum_size = Vector2(336, 336)
+custom_maximum_size = Vector2(336, 336)
+offset_right = 360.0
+offset_bottom = 240.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("1_8g6yu")
+script = ExtResource("1_tile")
+metadata/_custom_type_script = "uid://csgbx3264kcel"
