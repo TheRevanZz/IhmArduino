@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArduinoSettingsState">
+    <option name="espIdfPath" value="C:/Espressif/frameworks/esp-idf-v5.3.2" />
+    <option name="pythonPath" value="C:\Users\sylvi\.espressif\python_env\idf5.3_py3.13_env\Scripts\python.exe" />
+    <option name="arduinoCliPath" value="C:\ProgramData\chocolatey\bin\arduino-cli.exe" />
+    <option name="comPort" value="COM9" />
+    <option name="boardTarget" value="esp32c3" />
+    <option name="serialPort" value="COM9" />
+    <option name="activeBackend" value="arduino-cli" />
+  </component>
+</project>

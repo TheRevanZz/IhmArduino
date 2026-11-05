@@ -20,19 +20,35 @@ struct __attribute__((packed)) CounterPayload{
 };
 static_assert(sizeof(CounterPayload) == 4, "CounterPayload = 4 octets");
 
+struct __attribute__((packed)) LightPowerPayload{
+  bool value;
+};
+static_assert(sizeof(LightPowerPayload) == 1, "LightPowerPayload = 1 octet");
+
+struct __attribute__((packed)) LightColorPayload{
+  uint8_t color[3];
+};
+static_assert(sizeof(LightColorPayload) == 3, "LightColorPayload = 3 octets");
+
+
+
+
 static CounterPayload counter = {0};
 
 // ---- Subjects ----
 constexpr mps::Subject kSubHb = mps::makeSubject("hb_" DEVICE_NAME);
 constexpr mps::Subject kSubStatusCounter = mps::makeSubject("status_" DEVICE_NAME "_counter");
 constexpr mps::Subject kSubCmdResetCounter = mps::makeSubject("cmd_" DEVICE_NAME "_reset_counter");
+constexpr mps::Subject kSubLightPowerSwitch = mps::makeSubject("set_" DEVICE_NAME "_light_power");
+constexpr mps::Subject kSubLightColorSwitch = mps::makeSubject("set_" DEVICE_NAME "_light_color");
 // ... ajoutez vos sujets ici sur le même schéma que le heartbeat, mais en précisant la donnée envoyée,
 // par exemple : `constexpr mps::Subject kSubStatusSomeData = mps::makeSubject("status_" DEVICE_NAME "_some_data");`
 // ou : `constexpr mps::Subject kSubCmdSomeOrder = mps::makeSubject("cmd_" DEVICE_NAME "_some_order");`
 
-uint8_t color_cursor = 10;
+uint8_t color_cursor = 0;
 bool holding_button = false;
 uint8_t click_threshold = 90;
+uint16_t switch_light_threshold = 5000;
 
 // ---- Callbacks ----
 // Appelé lors de l'ouverture de la session (callback)
@@ -75,6 +91,30 @@ void publishHeartbeat(){
   }
 }
 
+static void onSetLightPower(const mps::FrameView& message, void*)
+{
+    
+    if(
+      LightPowerPayload p; 
+      mps::readPayloadAs(message, &p)
+    )
+    {
+      ChangeLedColor(Colors[p.value ? 1 : 0]);
+    }
+
+}
+
+static void onSetLightColor(const mps::FrameView& message, void*)
+{
+  if (
+    LightColorPayload p;
+    mps::readPayloadAs(message, &p)
+  )
+  {
+
+    ChangeLedColor(p.color);
+  }
+}
 
 
 // ---- Fonctions Arduino ----
@@ -91,6 +131,8 @@ void setup() {
   // par exemple :
   // MPS.on(kSubCmdSomeOrder, onCmdSomeOrder);
   MPS.on(kSubCmdResetCounter, onCmdReset);
+  MPS.on(kSubLightPowerSwitch, onSetLightPower);
+  MPS.on(kSubLightColorSwitch, onSetLightColor);
 
   // constante d'adresse vide pour vérifier que l'adresse a été définie dans config.h
   static const uint8_t kUnsetMacAddress[6] = {0, 0, 0, 0, 0, 0};
@@ -115,7 +157,8 @@ void publishCounter()
   }
 }
 
-bool b = false;
+bool action_done = false;
+
 void LightControl()
 {
   static uint32_t buttonTimer = 0;
@@ -124,9 +167,11 @@ void LightControl()
   {
 
         
-    if(millis() - buttonTimer >= click_threshold && !b && color_cursor != 0)
+    const auto interval = millis() - buttonTimer;
+
+    if(interval >= click_threshold && interval <= click_threshold * 1.2f && !action_done && color_cursor != 0)
     {
-      b = true;
+      action_done = true;
       color_cursor++;
       color_cursor %= Colors.size();
       if(color_cursor == 0)
@@ -134,8 +179,9 @@ void LightControl()
       ChangeLedColor(Colors[color_cursor]);
     }
 
-    else if(millis() - buttonTimer >= 5000)
+    else if(interval >= switch_light_threshold && interval <= switch_light_threshold * 1.1)
     {
+      action_done = true;
       buttonTimer = millis();
       if(color_cursor == 0)
       {
@@ -153,11 +199,12 @@ void LightControl()
   }
   else
   {
-    b = false;
+    action_done = false;
     buttonTimer = millis();
     holding_button = false;
   }
 }
+
 // Exécutée en boucle (= while(true))
 void loop() {
   // appel de la boucle MPS (/!\ du code bloquant dans votre boucle loop() pourrait occasionner des problèmes de connexion)

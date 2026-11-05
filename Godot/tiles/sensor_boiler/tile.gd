@@ -4,6 +4,8 @@ extends Tile
 const DEVICE_NAME = "sensor_d"
 const SUB_HB = "hb_" + DEVICE_NAME
 const SUB_COUNTER = "status_" + DEVICE_NAME + "_counter"
+const SUB_LIGHT_POWER = "set_" + DEVICE_NAME + "_light_power"
+const SUB_LIGHT_COLOR = "set_" + DEVICE_NAME + "_light_color"
 ## Délai sans heartbeat au-delà duquel le capteur est considéré comme bloqué (3,5 périodes de 1 s).
 const HB_TIMEOUT_S := 3.5
 ## Durée d'allumage de l'icône de heartbeat à chaque réception.
@@ -21,6 +23,10 @@ var _connected: bool = false:
 			_on_sensor_connected()
 		else:
 			_on_sensor_disconnected()
+			
+
+func _ready() -> void:
+	super._ready()
 
 
 func get_subscriptions() -> PackedStringArray:
@@ -67,6 +73,7 @@ func _process(delta: float) -> void:
 
 
 func _on_sensor_connected():
+	_on_light_power_button_toggled(false)
 	%IDLabel.text = "node_id: %d" % _node_id
 	%ConnectedIcon.state = true
 
@@ -83,3 +90,24 @@ func _on_hb(source_id: int):
 	if source_id != _node_id: return
 	_seconds_since_hb = 0.0
 	_connected = true
+
+
+func _on_light_power_button_toggled(toggled_on: bool) -> void:
+	var payload = PackedByteArray([toggled_on])
+	publish(SUB_LIGHT_POWER, payload, true)
+	if !toggled_on:
+		return;
+	var color_picker_button : ColorPickerButton = %ColorPickerButton
+	var color = color_picker_button.color;
+	_on_color_picker_button_color_changed(color)
+
+
+func _on_color_picker_button_color_changed(color: Color) -> void:
+	var finalColor = [
+		clampi(roundi(color[0] * 255),0,255), 
+		clampi(roundi(color[1] * 255),0,255), 
+		clampi(roundi(color[2] * 255),0,255)
+	]
+	var payload := PackedByteArray([finalColor])
+	publish(SUB_LIGHT_COLOR, payload, true)
+	

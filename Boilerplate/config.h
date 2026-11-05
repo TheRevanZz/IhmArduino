@@ -3,17 +3,19 @@
 #include <stdint.h>
 #include <vector>
 
-static const uint8_t kGatewayMacAddress[6] = {0x90,0xDA,0x72,0x52,0xEE,0x1C}; // Adresse de la passerelle (écriture hexadécimale)
-constexpr uint8_t kWifiChannel = 5; // Canal wifi de la passerelle
+static const uint8_t kGatewayMacAddress[6] = {0x90,0xDA,0x72,0x53,0x5D,0x88}; // Adresse de la passerelle (écriture hexadécimale)
+constexpr uint8_t kWifiChannel = 4; // Canal wifi de la passerelle
 
 #define DEVICE_NAME "sensor_d" // modifiez cette valeur avec le nom de votre capteur (sensor_<groupe>), ex : "sensor_a"
 
 #define G3_BUTTON 3
 #define LED 2
 
-std::array<std::array<uint8_t,3>,33> Colors = {{
+using Color_t = uint8_t[3];
+
+std::array<Color_t,33> Colors = {{
     {0,0,0},
-    {255,   0,   0}, // Rouge
+    {255,   0,   0}, // Rou3ge
     {  0, 255,   0}, // Vert
     {  0,   0, 255}, // Bleu
     {255, 255,   0}, // Jaune
@@ -50,7 +52,7 @@ std::array<std::array<uint8_t,3>,33> Colors = {{
     {240, 240, 240}  // Blanc cassé
 }};
 
-inline void ChangeLedColor(const std::array<uint8_t,3>& color)
+inline void ChangeLedColor(const uint8_t color[3])
 {
   rgbLedWrite(LED, color[0], color[1], color[2]);
 }
