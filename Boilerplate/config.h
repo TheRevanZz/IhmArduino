@@ -1,10 +1,11 @@
 #pragma once
 
 #include <stdint.h>
-#include <vector>
+#include <array>
+#include <MPS.h>
 
-static const uint8_t kGatewayMacAddress[6] = {0x90,0xDA,0x72,0x53,0x5D,0x88}; // Adresse de la passerelle (écriture hexadécimale)
-constexpr uint8_t kWifiChannel = 4; // Canal wifi de la passerelle
+static const uint8_t kGatewayMacAddress[6] = {0xF8,0x5B,0x1B,0x05,0x71,0xB4}; // Adresse de la passerelle (écriture hexadécimale)
+constexpr uint8_t kWifiChannel = 7; // Canal wifi de la passerelle
 
 #define DEVICE_NAME "sensor_d" // modifiez cette valeur avec le nom de votre capteur (sensor_<groupe>), ex : "sensor_a"
 
@@ -13,7 +14,7 @@ constexpr uint8_t kWifiChannel = 4; // Canal wifi de la passerelle
 
 using Color_t = uint8_t[3];
 
-std::array<Color_t,33> Colors = {{
+inline std::array<Color_t,33> Colors = {{
     {0,0,0},
     {255,   0,   0}, // Rou3ge
     {  0, 255,   0}, // Vert
@@ -52,9 +53,6 @@ std::array<Color_t,33> Colors = {{
     {240, 240, 240}  // Blanc cassé
 }};
 
-inline void ChangeLedColor(const uint8_t color[3])
-{
-  rgbLedWrite(LED, color[0], color[1], color[2]);
-}
+
 
 

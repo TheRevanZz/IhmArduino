@@ -4,12 +4,14 @@ extends Tile
 const DEVICE_NAME = "sensor_d"
 const SUB_HB = "hb_" + DEVICE_NAME
 const SUB_COUNTER = "status_" + DEVICE_NAME + "_counter"
-const SUB_LIGHT_POWER = "set_" + DEVICE_NAME + "_light_power"
-const SUB_LIGHT_COLOR = "set_" + DEVICE_NAME + "_light_color"
+const SUB_SET_LIGHT_COLOR = "set_" + DEVICE_NAME + "_light_color"
+const SUB_STATUS_LIGHT_COLOR = "status_" + DEVICE_NAME + "_light_color"
 ## Délai sans heartbeat au-delà duquel le capteur est considéré comme bloqué (3,5 périodes de 1 s).
 const HB_TIMEOUT_S := 3.5
 ## Durée d'allumage de l'icône de heartbeat à chaque réception.
 const HB_BLINK_S := 0.5
+
+var count = 0;
 
 # ---- VARIABLES ----
 var _node_id: int = -1
@@ -25,8 +27,12 @@ var _connected: bool = false:
 			_on_sensor_disconnected()
 			
 
-func _ready() -> void:
-	super._ready()
+#func _ready() -> void:
+	#super._ready()
+	
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		publish(SUB_SET_LIGHT_COLOR, PackedByteArray([0,0,0]), false)
 
 
 func get_subscriptions() -> PackedStringArray:
@@ -59,6 +65,7 @@ func on_message(subject_name: String, source_id: int, _payload: PackedByteArray)
 	if source_id != _node_id: return # ne traitez que les messages dédiés à votre capteur
 	# Ajoutez vos messages à la suite
 	if subject_name == SUB_COUNTER: _on_counter(_payload)
+	if subject_name == SUB_STATUS_LIGHT_COLOR: _on_light_color(_payload)
 
 
 func _on_counter(_payload : PackedByteArray):
@@ -93,21 +100,48 @@ func _on_hb(source_id: int):
 
 
 func _on_light_power_button_toggled(toggled_on: bool) -> void:
-	var payload = PackedByteArray([toggled_on])
-	publish(SUB_LIGHT_POWER, payload, true)
-	if !toggled_on:
-		return;
+	print("toggle")
+	
 	var color_picker_button : ColorPickerButton = %ColorPickerButton
-	var color = color_picker_button.color;
-	_on_color_picker_button_color_changed(color)
+	if toggled_on:
+		var color := transform_color(color_picker_button.color)
+		print("true")
+		print(color)
+		var payload = PackedByteArray(Array(color))
+		publish(SUB_SET_LIGHT_COLOR, payload, true)
+	else:
+		print("false")
+		var color := [0,0,0]
+		var payload = PackedByteArray(color)
+		publish(SUB_SET_LIGHT_COLOR, payload, true)
+
+	count+=1
 
 
-func _on_color_picker_button_color_changed(color: Color) -> void:
-	var finalColor = [
-		clampi(roundi(color[0] * 255),0,255), 
-		clampi(roundi(color[1] * 255),0,255), 
-		clampi(roundi(color[2] * 255),0,255)
+func transform_color(color: Color) -> Array[int]:
+	return [
+		clampi(roundi(color.r * 255.0),0,255), 
+		clampi(roundi(color.g * 255.0),0,255), 
+		clampi(roundi(color.b * 255.0),0,255)
 	]
-	var payload := PackedByteArray([finalColor])
-	publish(SUB_LIGHT_COLOR, payload, true)
+	
+func _on_color_picker_button_color_changed(color: Color) -> void:
+	if !%LightPowerButton.button_pressed:
+		return;
+
+	var finalColor := transform_color(color)
+	var payload = PackedByteArray(finalColor)
+	publish(SUB_SET_LIGHT_COLOR, payload, true)
+	
+func _on_light_color(_payload : PackedByteArray) -> void:
+	var r := _payload.decode_u8(0) / 255.0
+	var g := _payload.decode_u8(1) / 255.0
+	var b := _payload.decode_u8(2) / 255.0
+	%ColorPickerButton.color = Color(r,g,b);
+	
+	if r <= 0 && g <= 0 && b <= 0:
+		%LightPowerButton.button_pressed = false
+	else:
+		%LightPowerButton.button_pressed = true
+
 	

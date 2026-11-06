@@ -92,6 +92,7 @@ theme_override_font_sizes/font_size = 20
 text = "Compteur : 1"
 
 [node name="LightPowerButton" type="CheckButton" parent="." unique_id=1377602197]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 18.0
 offset_top = 123.0
