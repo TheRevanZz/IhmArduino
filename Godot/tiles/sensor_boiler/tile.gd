@@ -6,6 +6,7 @@ const SUB_HB = "hb_" + DEVICE_NAME
 const SUB_COUNTER = "status_" + DEVICE_NAME + "_counter"
 const SUB_LIGHT_POWER = "set_" + DEVICE_NAME + "_light_power"
 const SUB_LIGHT_COLOR = "set_" + DEVICE_NAME + "_light_color"
+const SUB_TEMPERATURE_Humidity = "status_" + DEVICE_NAME + "_temperature_humdity"
 ## Délai sans heartbeat au-delà duquel le capteur est considéré comme bloqué (3,5 périodes de 1 s).
 const HB_TIMEOUT_S := 3.5
 ## Durée d'allumage de l'icône de heartbeat à chaque réception.
@@ -33,6 +34,7 @@ func get_subscriptions() -> PackedStringArray:
 	var subscriptions: PackedStringArray = []
 	subscriptions.append(SUB_HB)
 	subscriptions.append(SUB_COUNTER)
+	subscriptions.append(SUB_TEMPERATURE_Humidity)
 	return subscriptions
 
 
@@ -59,11 +61,19 @@ func on_message(subject_name: String, source_id: int, _payload: PackedByteArray)
 	if source_id != _node_id: return # ne traitez que les messages dédiés à votre capteur
 	# Ajoutez vos messages à la suite
 	if subject_name == SUB_COUNTER: _on_counter(_payload)
+	if subject_name == SUB_TEMPERATURE_Humidity: _on_temperature_humidity(_payload)
 
 
 func _on_counter(_payload : PackedByteArray):
 	%CounterLabel.text = "Compteur: " + str(_payload.get(0))
 
+func _on_temperature_humidity(_payload : PackedByteArray):
+	var temp: float = _payload.get(0);
+	var hum: float = _payload.get(1);
+	%TemperatureLabel.text = "Temperature: " + str(temp / 10) + "°C"
+	%HumidityLabel.text = "Humidité: " + str(hum / 10) + "%"
+	#var test = _payload.get(0);
+	#print(test);
 
 func _process(delta: float) -> void:
 	_seconds_since_hb += delta

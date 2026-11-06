@@ -1,3 +1,6 @@
+#include <DHT.h>
+#include <DHT_U.h>
+
 #include <MPS.h>
 #include "config.h"
 
@@ -30,8 +33,14 @@ struct __attribute__((packed)) LightColorPayload{
 };
 static_assert(sizeof(LightColorPayload) == 3, "LightColorPayload = 3 octets");
 
+struct __attribute__((packed)) TemperatureHumidityPayload {
+  float temperature;
+  float humidity;
+};
+static_assert(sizeof(TemperatureHumidityPayload) == 8, "TemperatureHumidityPayload = 8 octets");
 
 
+DHT dht(DHTPIN, DHTTYPE);
 
 static CounterPayload counter = {0};
 
@@ -41,6 +50,7 @@ constexpr mps::Subject kSubStatusCounter = mps::makeSubject("status_" DEVICE_NAM
 constexpr mps::Subject kSubCmdResetCounter = mps::makeSubject("cmd_" DEVICE_NAME "_reset_counter");
 constexpr mps::Subject kSubLightPowerSwitch = mps::makeSubject("set_" DEVICE_NAME "_light_power");
 constexpr mps::Subject kSubLightColorSwitch = mps::makeSubject("set_" DEVICE_NAME "_light_color");
+constexpr mps::Subject kSubStatusTemperatureHumidity = mps::makeSubject("status_" DEVICE_NAME "_temperature_humidity");
 // ... ajoutez vos sujets ici sur le même schéma que le heartbeat, mais en précisant la donnée envoyée,
 // par exemple : `constexpr mps::Subject kSubStatusSomeData = mps::makeSubject("status_" DEVICE_NAME "_some_data");`
 // ou : `constexpr mps::Subject kSubCmdSomeOrder = mps::makeSubject("cmd_" DEVICE_NAME "_some_order");`
@@ -145,6 +155,8 @@ void setup() {
   // démarrage du client MPS
   if(!MPS.begin(kGatewayMacAddress, DEVICE_NAME, kWifiChannel)) Serial.println("MPS: demarrage impossible");
 
+  Serial.println(F("DHT11 test!"));
+  dht.begin();
 }
 
 void publishCounter()
@@ -154,6 +166,23 @@ void publishCounter()
     lastCounterTimeMs = millis();
     counter.value++;
     MPS.publishValue(kSubStatusCounter, counter);
+  }
+}
+
+void publishTemperatureHumidity()
+{
+  static uint32_t lastCounterTimeMs = 0;
+  int temp = dht.readTemperature();
+  int hum = dht.readHumidity();
+  if (std::isnan(temp) || std::isnan(hum))
+  {
+    Serial.print(F("Impossible de lire la température ou l'humidité"));
+    return;
+  }
+  if (millis() - lastCounterTimeMs >= 500)
+  {
+    lastCounterTimeMs = millis();
+    MPS.publishValue(kSubStatusTemperatureHumidity, TemperatureHumidityPayload{temp * 10, hum * 10});
   }
 }
 
@@ -213,6 +242,7 @@ void loop() {
   // Appel non bloquant de l'envoi d'HB (polling)
   publishHeartbeat();
   publishCounter();
+  publishTemperatureHumidity();
   // ... ajoutez vos envois de données et autres comportements **non bloquants**
   // par exemple :
   // static uint32_t lastDataStatusTimeMs = 0;
