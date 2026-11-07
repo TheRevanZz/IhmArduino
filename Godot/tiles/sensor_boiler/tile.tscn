@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://dy2aoacovd7nf" path="res://tiles/sensor_boiler/SpaceMono-Bold.ttf" id="5_bq384"]
 [ext_resource type="Script" uid="uid://cckwr06504sfp" path="res://core/state_icon.gd" id="5_mn2ah"]
 [ext_resource type="FontFile" uid="uid://cgmdfv1y5xbjs" path="res://tiles/sensor_boiler/SpaceMono-Regular.ttf" id="7_f7tlc"]
+[ext_resource type="Script" uid="uid://d1vul6lb0ckxk" path="res://tiles/sensor_boiler/slider_label.gd" id="8_15dvh"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lbf3d"]
 content_margin_bottom = 1.0
@@ -102,10 +103,10 @@ offset_bottom = 147.0
 [node name="ColorPickerButton" type="ColorPickerButton" parent="." unique_id=2097144994]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 60.0
-offset_top = 160.0
-offset_right = 247.0
-offset_bottom = 206.0
+offset_left = 28.0
+offset_top = 167.0
+offset_right = 215.0
+offset_bottom = 213.0
 
 [node name="TemperatureLabel" type="Label" parent="." unique_id=1415748674]
 unique_name_in_owner = true
@@ -116,5 +117,34 @@ offset_right = 154.0
 offset_bottom = 268.0
 text = "Température : 0°"
 
+[node name="SliderContainer" type="HBoxContainer" parent="." unique_id=868038130]
+propagate_maximum_size = false
+layout_mode = 0
+offset_left = 247.0
+offset_top = 121.0
+offset_right = 297.0
+offset_bottom = 306.0
+layout_direction = 2
+alignment = 1
+
+[node name="SwitchDelaySlider" type="VSlider" parent="SliderContainer" unique_id=1486106176]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 5.0
+rounded = true
+allow_greater = true
+
+[node name="SliderLabel" type="Label" parent="SliderContainer" unique_id=542046041]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+text = "ok"
+horizontal_alignment = 3
+vertical_alignment = 3
+script = ExtResource("8_15dvh")
+
 [connection signal="toggled" from="LightPowerButton" to="." method="_on_light_power_button_toggled"]
 [connection signal="color_changed" from="ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]
+[connection signal="value_changed" from="SliderContainer/SwitchDelaySlider" to="." method="_on_switch_delay_slider_value_changed"]
