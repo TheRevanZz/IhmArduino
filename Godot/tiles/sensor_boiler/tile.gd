@@ -6,6 +6,8 @@ const SUB_HB = "hb_" + DEVICE_NAME
 const SUB_COUNTER = "status_" + DEVICE_NAME + "_counter"
 const SUB_SET_LIGHT_COLOR = "set_" + DEVICE_NAME + "_light_color"
 const SUB_STATUS_LIGHT_COLOR = "status_" + DEVICE_NAME + "_light_color"
+const SUB_SET_SWITCH_THRESHOLD = "set_" + DEVICE_NAME + "_switch_threshold"
+const SUB_STATUS_SWITCH_THRESHOLD = "status_" + DEVICE_NAME + "_switch_threshold"
 ## Délai sans heartbeat au-delà duquel le capteur est considéré comme bloqué (3,5 périodes de 1 s).
 const HB_TIMEOUT_S := 3.5
 ## Durée d'allumage de l'icône de heartbeat à chaque réception.
@@ -66,11 +68,15 @@ func on_message(subject_name: String, source_id: int, _payload: PackedByteArray)
 	# Ajoutez vos messages à la suite
 	if subject_name == SUB_COUNTER: _on_counter(_payload)
 	if subject_name == SUB_STATUS_LIGHT_COLOR: _on_light_color(_payload)
+	if subject_name == SUB_STATUS_SWITCH_THRESHOLD: _on_switch_threshold(_payload)
 
 
 func _on_counter(_payload : PackedByteArray):
 	%CounterLabel.text = "Compteur: " + str(_payload.get(0))
 
+func _on_switch_threshold(_payload : PackedByteArray):
+	var value = _payload.decode_u8(0)
+	%SliderLabel.update_slider_value(value)
 
 func _process(delta: float) -> void:
 	_seconds_since_hb += delta
@@ -115,9 +121,6 @@ func _on_light_power_button_toggled(toggled_on: bool) -> void:
 		var payload = PackedByteArray(color)
 		publish(SUB_SET_LIGHT_COLOR, payload, true)
 
-	count+=1
-
-
 func transform_color(color: Color) -> Array[int]:
 	return [
 		clampi(roundi(color.r * 255.0),0,255), 
@@ -145,3 +148,8 @@ func _on_light_color(_payload : PackedByteArray) -> void:
 		%LightPowerButton.button_pressed = true
 
 	
+
+
+func _on_switch_delay_slider_value_changed(value: float) -> void:
+	var payload = PackedByteArray([value])
+	publish(SUB_SET_SWITCH_THRESHOLD, payload, true)
