@@ -24,7 +24,7 @@ ControllerManager controllerManager{ new CounterController(), new HeartbeatContr
 // Appelé lors de l'ouverture de la session (callback)
 static void onSessionOpened() {
   Serial.println("Session opened!");
-  controllerManager.OnSessionOpened();
+  controllerManager.onSessionOpened();
   // republiez ici l’état initial, la passerelle ne garde rien
 }
 
@@ -47,7 +47,7 @@ void setup() {
   // MPS.on(kSubStatusCounter, )
   // ... ajoutez vos callbacks à l'aide de MPS.on(const mps::Subject& subject, mps::MessageHandler handler, void* userContext = nullptr)
 
-  controllerManager.Setup();
+  controllerManager.setup();
 
   // constante d'adresse vide pour vérifier que l'adresse a été définie dans config.h
   static const uint8_t kUnsetMacAddress[6] = { 0, 0, 0, 0, 0, 0 };
@@ -65,5 +65,5 @@ void loop() {
   // appel de la boucle MPS (/!\ du code bloquant dans votre boucle loop() pourrait occasionner des problèmes de connexion)
   MPS.loop();
 
-  controllerManager.Loop();
+  controllerManager.loop();
 }

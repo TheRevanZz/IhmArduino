@@ -16,7 +16,7 @@ enum class ESubjectType
 #undef X
 };
 
-inline constexpr bool ValidSubjectVarname(const char *value)
+inline constexpr bool validSubjectVarname(const char *value)
 {
 
   std::string_view str_view{value};
@@ -33,7 +33,7 @@ inline constexpr bool ValidSubjectVarname(const char *value)
   return false;
 }
 
-inline constexpr char* GetSubjectTypeFromVarName(const char *varname)
+inline constexpr char* getSubjectTypeFromVarName(const char *varname)
 {
   std::string_view str_view{varname};
   str_view.remove_prefix(std::string_view(PREFIX_SUBJECT).size());
@@ -52,7 +52,7 @@ inline constexpr char toLower(char c)
 }
 
 template <size_t N>
-constexpr auto MakeSubjectName(
+constexpr auto makeSubjectName(
     std::string_view type,
     const char (&device)[N],
     std::string_view suffix = {})

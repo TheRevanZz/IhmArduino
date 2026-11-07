@@ -9,14 +9,14 @@ protected:
 	BaseController() {};
 
 protected: 
-  bool VerifyPayloadLength(const mps::FrameView& , uint8_t length);
+  bool verifyPayloadLength(const mps::FrameView& , uint8_t length);
 
-  uint8_t payload_length = 4;
+  uint8_t payloadLength = 4;
 
 public:
-  virtual void OnSessionOpened(){}
-  virtual void Setup() = 0;
-  virtual void Update() = 0;
-  virtual void Reset(){}
+  virtual void onSessionOpened(){}
+  virtual void setup() = 0;
+  virtual void update() = 0;
+  virtual void reset(){}
   
 };

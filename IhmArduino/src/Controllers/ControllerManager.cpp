@@ -1,10 +1,10 @@
 #include "Controllers/ControllerManager.h"
 
-void ControllerManager::Setup()
+void ControllerManager::setup()
 {
 	for (BaseController* const controller : controllers)
 	{
-		controller->Setup();
+		controller->setup();
 	}
 
 	MPS.on(kSubCmdReset, [](const mps::FrameView& message, void* userContext) {
@@ -15,30 +15,30 @@ void ControllerManager::Setup()
 		if (!self)
 			return;
 
-		self->Reset();
+		self->reset();
 	}, this);
 }
 
-void ControllerManager::OnSessionOpened()
+void ControllerManager::onSessionOpened()
 {
 	for (BaseController* const controller : controllers)
 	{
-		controller->OnSessionOpened();
+		controller->onSessionOpened();
 	}
 }
 
-void ControllerManager::Loop()
+void ControllerManager::loop()
 {
 	for (BaseController* const controller : controllers)
 	{
-		controller->Update();
+		controller->update();
 	}
 }
 
-void ControllerManager::Reset()
+void ControllerManager::reset()
 {
 	for (BaseController* const controller : controllers)
 	{
-		controller->Reset();
+		controller->reset();
 	}
 }

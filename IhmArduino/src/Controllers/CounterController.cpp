@@ -2,12 +2,12 @@
 
 
 CounterController::CounterController() {
-  payload_length = 4;
+  payloadLength = 4;
   static_assert(sizeof(Payload) == sizeof(uint32_t), "Payload = 4 octets");
 }
 
-void CounterController::OnCmdReset(const mps::FrameView& message) {
-  if (!VerifyPayloadLength(message, 0))
+void CounterController::onCmdReset(const mps::FrameView& message) {
+  if (!verifyPayloadLength(message, 0))
     return;
   counter.value = 0;
   MPS.publishValue(kSubStatusCounter, counter);  // l'IHM voit le r�sultat r�el
@@ -27,22 +27,22 @@ void CounterController::publishCounter()
     MPS.publishValue(kSubStatusCounter, counter);
 }
 
-void CounterController::Update()
+void CounterController::update()
 {
     handleCounterTimer();
 }
 
-void CounterController::Setup()
+void CounterController::setup()
 {
     MPS.on(
         kSubCmdResetCounter, [](const mps::FrameView& message, void* userContext) {
             auto* self = static_cast<CounterController*>(userContext);
-            self->OnCmdReset(message);
+            self->onCmdReset(message);
         },
         this);
 }
 
-void CounterController::OnSessionOpened()
+void CounterController::onSessionOpened()
 {
     publishCounter();
 }

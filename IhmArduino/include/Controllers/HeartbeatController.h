@@ -8,12 +8,12 @@ CREATE_SUBJECT(kSubHb,)
 class HeartbeatController : public BaseController {
 
 private:
-  void HandleHeartbeat();
+  void handleHeartbeat();
   void publishHeartbeat();
 
 public:
-  virtual void Update() override;
-  virtual void Setup() override {};
-  virtual void OnSessionOpened() { publishHeartbeat(); }
+  virtual void update() override;
+  virtual void setup() override {};
+  virtual void onSessionOpened() { publishHeartbeat(); }
 
 };

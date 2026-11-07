@@ -8,17 +8,17 @@ LedController::LedController()
 	  switchThresholdPayload{
 		  .switch_threshold = 2}
 {
-	payload_length = 3;
+	payloadLength = 3;
 	static_assert(sizeof(ledDataPayload) == sizeof(uint8_t) * 3);
 	static_assert(sizeof(switchThresholdPayload) == sizeof(uint8_t));
 }
 
-void LedController::Update()
+void LedController::update()
 {
-	LightControl();
+	lightControl();
 }
 
-void LedController::Setup()
+void LedController::setup()
 {
 
 	Serial.println("LED CONTROLLER SETUP");
@@ -29,9 +29,9 @@ void LedController::Setup()
         auto* self = reinterpret_cast<LedController*>(userContext);
         if(!self)
           return;
-        if (!self->VerifyPayloadLength(message, self->payload_length))
+        if (!self->verifyPayloadLength(message, self->payloadLength))
           return; 
-        self->OnSetLightColor(message); },
+        self->onSetLightColor(message); },
 		this);
 
 	MPS.on(
@@ -40,132 +40,132 @@ void LedController::Setup()
         auto* self = reinterpret_cast<LedController*>(userContext);
         if(!self)
           return;
-        if (!self->VerifyPayloadLength(message, 1))
+        if (!self->verifyPayloadLength(message, 1))
           return; 
-        self->OnSetSwitchThreshold(message); },
+        self->onSetSwitchThreshold(message); },
 		this);
 
-	OnSessionOpened();
+	onSessionOpened();
 }
 
-void LedController::OnSessionOpened()
+void LedController::onSessionOpened()
 {
-	ChangeLedColor(ledDataPayload.color().data());
-	ChangeSwitchThreshold(switchThresholdPayload.switch_threshold);
+	changeLedColor(ledDataPayload.color().data());
+	changeSwitchThreshold(switchThresholdPayload.switch_threshold);
 }
 
-void LedController::OnSetLightColor(const mps::FrameView &message)
+void LedController::onSetLightColor(const mps::FrameView &message)
 {
 	LedController::LedDataPayload p;
 	if (mps::readPayloadAs(message, &p))
 	{
-		ChangeLedColor(p.color().data());
+		changeLedColor(p.color().data());
 	}
 	// La couleur a été Set depuis l'IHM, on met le cursor de couleur à un comme si ça si on veut rechanger de couleurs depuis le capteur, on repart du 1
-	color_cursor = 1;
+	colorCursor = 1;
 }
 
-void LedController::PublishPayload()
+void LedController::publishPayload()
 {
 	MPS.publishValue(kSubStatusLightColor, ledDataPayload);
 }
 
-void LedController::ChangeLedColor(const uint8_t color[3])
+void LedController::changeLedColor(const uint8_t color[3])
 {
-	UpdateColorField(color);
+	updateColorField(color);
 	rgbLedWrite(LED, color[0], color[1], color[2]);
-	PublishPayload();
+	publishPayload();
 }
 
-void LedController::LightControl()
+void LedController::lightControl()
 {
 	static uint32_t buttonTimer = 0;
 
 	const bool buttonPressed = !digitalRead(G3_BUTTON);
 
-	if (buttonPressed && !holding_button)
+	if (buttonPressed && !holdingButton)
 	{
 		buttonTimer = millis();
-		holding_button = true;
+		holdingButton = true;
 	}
-	else if (buttonPressed && holding_button)
+	else if (buttonPressed && holdingButton)
 	{
 		const auto interval = millis() - buttonTimer;
 
-		if (interval >= switch_light_threshold_ms)
+		if (interval >= switchLightThresholdMs)
 		{
-			if (color_cursor == 0)
+			if (colorCursor == 0)
 			{
 				bool valid = false;
-				color_cursor = GetColorIndex(ledDataPayload.color().data(), valid);
-				if (color_cursor == 0)
-					color_cursor = 1;
+				colorCursor = getColorIndex(ledDataPayload.color().data(), valid);
+				if (colorCursor == 0)
+					colorCursor = 1;
 				if (!valid)
 					return;
 			}
 			else
 			{
-				color_cursor = 0;
+				colorCursor = 0;
 			}
-			ChangeLedColor(Colors[color_cursor]);
-			holding_button = false;
-			ignore_next_button_release = true;
+			changeLedColor(colors[colorCursor]);
+			holdingButton = false;
+			ignoreNextButtonRelease = true;
 		}
 
 	}
-	else if (!buttonPressed && holding_button)
+	else if (!buttonPressed && holdingButton)
 	{
 		const auto interval = millis() - buttonTimer;
 
-		if (interval >= click_threshold && color_cursor != 0 && !ignore_next_button_release)
+		if (interval >= clickThreshold && colorCursor != 0 && !ignoreNextButtonRelease)
 		{
-			color_cursor++;
-			color_cursor %= Colors.size();
-			if (color_cursor == 0)
-				color_cursor = 1;
-			ChangeLedColor(Colors[color_cursor]);
+			colorCursor++;
+			colorCursor %= colors.size();
+			if (colorCursor == 0)
+				colorCursor = 1;
+			changeLedColor(colors[colorCursor]);
 		}
-		else if (ignore_next_button_release)
+		else if (ignoreNextButtonRelease)
 		{
-			ignore_next_button_release = false;
+			ignoreNextButtonRelease = false;
 		}
 
-		holding_button = false;
+		holdingButton = false;
 	}
 }
 
-uint8_t LedController::GetColorIndex(uint8_t color[3], bool &valid)
+uint8_t LedController::getColorIndex(uint8_t color[3], bool &valid)
 {
-	auto it = std::find_if(Colors.begin(), Colors.end(), [&color](const auto &c)
+	auto it = std::find_if(colors.begin(), colors.end(), [&color](const auto &c)
 						   { return c[0] == color[0] && c[1] == color[1] && c[2] == color[2]; });
-	if (it == Colors.end())
+	if (it == colors.end())
 	{
 		valid = false;
 		return 0;
 	}
 
 	valid = true;
-	return static_cast<uint8_t>(it - Colors.begin());
+	return static_cast<uint8_t>(it - colors.begin());
 }
 
-void LedController::UpdateColorField(const uint8_t color[3])
+void LedController::updateColorField(const uint8_t color[3])
 {
 	ledDataPayload.r = color[0];
 	ledDataPayload.g = color[1];
 	ledDataPayload.b = color[2];
 }
 
-void LedController::OnSetSwitchThreshold(const mps::FrameView &message)
+void LedController::onSetSwitchThreshold(const mps::FrameView &message)
 {
 	if (mps::readPayloadAs(message, &switchThresholdPayload))
 	{
-		ChangeSwitchThreshold(switchThresholdPayload.switch_threshold);
+		changeSwitchThreshold(switchThresholdPayload.switch_threshold);
 	}
 }
 
-void LedController::ChangeSwitchThreshold(uint8_t threshold)
+void LedController::changeSwitchThreshold(uint8_t threshold)
 {
 	switchThresholdPayload.switch_threshold = threshold;
-	switch_light_threshold_ms = static_cast<uint16_t>(threshold) * (uint16_t)1000;
+	switchLightThresholdMs = static_cast<uint16_t>(threshold) * (uint16_t)1000;
 	MPS.publishValue(kSubStatusSwitchThreshold, switchThresholdPayload);
 }

@@ -16,7 +16,7 @@ constexpr uint8_t kWifiChannel = 7; // Canal wifi de la passerelle
 
 using Color_t = uint8_t[3];
 
-inline std::array<Color_t,33> Colors = {{
+inline std::array<Color_t,33> colors = {{
     {0,0,0},
     {255,   66,   0}, // Rou3ge
     {  0, 255,   0}, // Vert

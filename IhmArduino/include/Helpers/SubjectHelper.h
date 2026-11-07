@@ -4,9 +4,9 @@
 #include <string_view>
 
 #define CREATE_SUBJECT(varname, suffix)                                                                                      \
-  static_assert(ValidSubjectVarname(#varname), "Le nom de variable du subject n'est pas valide : " #varname);                \
+  static_assert(validSubjectVarname(#varname), "Le nom de variable du subject n'est pas valide : " #varname);                \
   inline constexpr auto varname##SubName =                                                                                   \
-      MakeSubjectName(std::string_view(GetSubjectTypeFromVarName(#varname)),                                                 \
+      makeSubjectName(std::string_view(getSubjectTypeFromVarName(#varname)),                                                 \
                       DEVICE_NAME, std::string_view(#suffix));                                                               \
   static_assert(mps::isValidSubjectName(varname##SubName.data()), "Le nom du subject n'est pas valide"); \
   inline constexpr mps::Subject varname =                                                                                    \

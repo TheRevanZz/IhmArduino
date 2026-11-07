@@ -13,10 +13,10 @@ public:
   ControllerManager(std::initializer_list<BaseController*> _controllers) : 
     controllers{_controllers.begin(), _controllers.end()} {}
 
-  void Setup();
-  void OnSessionOpened();
-  void Loop();
-  void Reset();  
+  void setup();
+  void onSessionOpened();
+  void loop();
+  void reset();  
 
 private:
   std::vector<BaseController*> controllers;

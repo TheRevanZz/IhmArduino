@@ -1,6 +1,6 @@
 #include "Controllers/HeartbeatController.h"
 
-void HeartbeatController::HandleHeartbeat() {
+void HeartbeatController::handleHeartbeat() {
     static uint32_t lastHeartbeatTimeMs = 0;
     static const uint16_t kHbPeriod = 1000;
     if (millis() - lastHeartbeatTimeMs >= kHbPeriod) {
@@ -16,7 +16,7 @@ void HeartbeatController::publishHeartbeat()
     MPS.publishHeartbeat(kSubHb);
 }
 
-void HeartbeatController::Update()
+void HeartbeatController::update()
 {
-    HandleHeartbeat();
+    handleHeartbeat();
 }

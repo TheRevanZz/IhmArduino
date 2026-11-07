@@ -20,13 +20,13 @@ public:
   CounterController();  
 
 private:
-  void OnCmdReset(const mps::FrameView& message);
+  void onCmdReset(const mps::FrameView& message);
 
   void handleCounterTimer();
   void publishCounter();
 
 public:
-  virtual void Update() override;
-  virtual void Setup() override;
-  virtual void OnSessionOpened() override;
+  virtual void update() override;
+  virtual void setup() override;
+  virtual void onSessionOpened() override;
 };

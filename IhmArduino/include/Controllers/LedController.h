@@ -38,25 +38,25 @@ public:
 
 private:
 
-  uint8_t color_cursor = 0;
-  bool holding_button = false;
-  uint8_t click_threshold = 100;
-  //En Millisecondes, le temps pour maintenir le bouton pour allumer/éteindre la led
-  uint16_t switch_light_threshold_ms = 5000;
-  bool ignore_next_button_release = false;
+  uint8_t colorCursor = 0;
+  bool holdingButton = false;
+  uint8_t clickThreshold = 100;
+  //En Millisecondes, le temps qu'il faut maintenir le bouton pour allumer/éteindre la led
+  uint16_t switchLightThresholdMs = 5000;
+  bool ignoreNextButtonRelease = false;
   
-  void OnSetLightColor(const mps::FrameView& message);
-  void OnSetSwitchThreshold(const mps::FrameView& message);
-  void PublishPayload();
-  void ChangeLedColor(const uint8_t color[3]);
-  void ChangeSwitchThreshold(uint8_t threshold);
+  void onSetLightColor(const mps::FrameView& message);
+  void onSetSwitchThreshold(const mps::FrameView& message);
+  void publishPayload();
+  void changeLedColor(const uint8_t color[3]);
+  void changeSwitchThreshold(uint8_t threshold);
 
-  void LightControl();
-  uint8_t GetColorIndex(uint8_t color[3], bool& valid);
-  void UpdateColorField(const uint8_t color[3]);
+  void lightControl();
+  uint8_t getColorIndex(uint8_t color[3], bool& valid);
+  void updateColorField(const uint8_t color[3]);
 
 public:
-  virtual void Update() override;
-  virtual void Setup() override;
-  virtual void OnSessionOpened() override;
+  virtual void update() override;
+  virtual void setup() override;
+  virtual void onSessionOpened() override;
 };
