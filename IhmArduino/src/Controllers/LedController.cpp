@@ -1,4 +1,4 @@
-#include "Controllers/Led/LedController.h"
+#include "Controllers/LedController.h"
 
 LedController::LedController()
 	: ledDataPayload{
@@ -7,11 +7,10 @@ LedController::LedController()
 		  .b = 0},
 	  switchThresholdPayload{
 		  .switch_threshold = 2}
-
 {
 	payload_length = 3;
-	static_assert(sizeof(ledDataPayload) == 3);
-	static_assert(sizeof(switchThresholdPayload) == 1);
+	static_assert(sizeof(ledDataPayload) == sizeof(uint8_t) * 3);
+	static_assert(sizeof(switchThresholdPayload) == sizeof(uint8_t));
 }
 
 void LedController::Update()

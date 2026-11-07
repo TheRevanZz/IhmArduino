@@ -4,7 +4,8 @@
 #include "Helpers/SubjectHelper.h"
 #include <vector>
 
-MAKE_SUBJECT(Cmd, Reset)
+// MAKE_SUBJECT(Cmd, Reset)
+CREATE_SUBJECT(kSubCmdReset, Reset)
 
 class ControllerManager {
 

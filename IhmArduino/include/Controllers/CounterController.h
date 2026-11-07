@@ -3,8 +3,12 @@
 #include "Controllers/BaseController.h"
 #include "Helpers/SubjectHelper.h"
 
-MAKE_SUBJECT(Status,Counter)
-MAKE_SUBJECT_BIS(Cmd,ResetCounter,reset_counter)
+//Status utilisé pour indiqué à l'IHM que le compteur a changer
+CREATE_SUBJECT(kSubStatusCounter,Counter)
+
+//Commande permettant de reinitialiser le compteur
+CREATE_SUBJECT(kSubCmdResetCounter,reset_counter)
+
 
 class CounterController : public BaseController {
 
@@ -13,6 +17,8 @@ public:
     uint32_t value;
   } counter = { 0 };
 
+  CounterController();  
+
 private:
   void OnCmdReset(const mps::FrameView& message);
 
@@ -20,9 +26,6 @@ private:
   void publishCounter();
 
 public:
-
-  CounterController();
-
   virtual void Update() override;
   virtual void Setup() override;
   virtual void OnSessionOpened() override;

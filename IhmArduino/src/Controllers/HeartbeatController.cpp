@@ -1,4 +1,4 @@
-#include "Controllers/Heartbeat/HeartbeatController.h"
+#include "Controllers/HeartbeatController.h"
 
 void HeartbeatController::HandleHeartbeat() {
     static uint32_t lastHeartbeatTimeMs = 0;

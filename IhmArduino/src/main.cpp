@@ -1,10 +1,10 @@
 #include <MPS.h>
 #include <Arduino.h>
 #include "config.h"
-#include "Controllers/Counter/CounterController.h"
-#include "Controllers/Heartbeat/HeartbeatController.h"
-#include "Controllers/Led/LedController.h"
-#include "Controllers/Manager/ControllerManager.h"
+#include "Controllers/CounterController.h"
+#include "Controllers/HeartbeatController.h"
+#include "Controllers/LedController.h"
+#include "Controllers/ControllerManager.h"
 
 // ---- Structures de payload ----
 // placer ici vos structures de payloads, par exemple :

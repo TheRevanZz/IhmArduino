@@ -5,13 +5,13 @@
 #include "Controllers/BaseController.h"
 
 //Subject permettant de gérer la couleur de la led. Quand celle-ci est en noir, la led s'éteint
-MAKE_SUBJECT_BIS(Set, LightColor, light_color)
+CREATE_SUBJECT(kSubSetLightColor, light_color)
 //Status permettant d'informer Godot sur l'état de la lumière
-MAKE_SUBJECT_BIS(Status, LightColor, light_color)
+CREATE_SUBJECT(kSubStatusLightColor, light_color)
 
 //Subject Set permettant de gérer le nombre de secondes a maintenir le bouton pour allumer/éteindre la led
-MAKE_SUBJECT_BIS(Set,SwitchThreshold, switch_threshold)
-MAKE_SUBJECT_BIS(Status,SwitchThreshold, switch_threshold)
+CREATE_SUBJECT(kSubSetSwitchThreshold, switch_threshold)
+CREATE_SUBJECT(kSubStatusSwitchThreshold, switch_threshold)
 
 class LedController : public BaseController {
 

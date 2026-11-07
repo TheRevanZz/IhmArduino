@@ -1,9 +1,9 @@
-#include "Controllers/Counter/CounterController.h"
+#include "Controllers/CounterController.h"
 
 
 CounterController::CounterController() {
   payload_length = 4;
-  static_assert(sizeof(Payload) == 4, "Payload = 4 octets");
+  static_assert(sizeof(Payload) == sizeof(uint32_t), "Payload = 4 octets");
 }
 
 void CounterController::OnCmdReset(const mps::FrameView& message) {

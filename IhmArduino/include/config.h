@@ -12,6 +12,8 @@ constexpr uint8_t kWifiChannel = 7; // Canal wifi de la passerelle
 #define G3_BUTTON 3
 #define LED 2
 
+#define PREFIX_SUBJECT "kSub"
+
 using Color_t = uint8_t[3];
 
 inline std::array<Color_t,33> Colors = {{
