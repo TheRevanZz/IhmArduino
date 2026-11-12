@@ -15,7 +15,6 @@ jobs:
         steps:
             - uses : actions/checkout@v6
               with:
-                ref: generated
                 token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: git CONFIG
