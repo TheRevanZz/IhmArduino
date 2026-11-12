@@ -30,6 +30,7 @@ jobs:
             
             - name: Changement de branche
               run: |
+                  git fetch --all
                   git switch arduino_ide_version
             
             - name: Suppression des fichiers inutiles pour garder uniquement ceux de ArduinoIDE
