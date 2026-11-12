@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - ide/passage-platformIO
 
 jobs:
     convert:
@@ -44,6 +43,10 @@ jobs:
             - name: Commit et push
               run: |
                   git add .
-                  git commit -m "Création de l'équivalent Arduino IDE"
-                  git push origin arduino_ide_version
+                  if git diff-index --quiet HEAD --; then
+                    echo "No changes to commit"
+                  else
+                    git commit -m "${{ github.event.head_commit.message }}"
+                    git push -f || true
+                  fi
            
