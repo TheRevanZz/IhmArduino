@@ -24,8 +24,8 @@ jobs:
             
             - name: Creation de l'équivalent Arduino IDE
               run: |
-                  chmod +x arduino_ide_conversion.bash
                   cd IhmArduino
+                  chmod +x arduino_ide_conversion.bash
                   ./arduino_ide_conversion.bash ihm main.cpp
             
             - name: Changement de branche
