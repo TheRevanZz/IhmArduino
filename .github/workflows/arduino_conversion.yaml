@@ -35,6 +35,7 @@ jobs:
             
             - name: Suppression des fichiers inutiles pour garder uniquement ceux de ArduinoIDE
               run: |
+                  cd IhmArduino
                   find . -mindepth 1 -maxdepth 1 ! -name "ihm" -exec rm -rf {} +
                   mv ihm/* .
                   rm -rf ihm
