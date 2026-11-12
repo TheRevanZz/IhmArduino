@@ -1,0 +1,52 @@
+name : "Create Arduino Version"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    convert:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            - uses : actions/checkout@v6
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: git CONFIG
+              run: |
+                  git config --global user.name "sylverstone-action"
+                  git config --global user.email "sylvio8.pm@gmail.com"
+            
+            - name: Creation de l'équivalent Arduino IDE
+              run: |
+                  cd IhmArduino
+                  chmod +x arduino_ide_conversion.bash
+                  ./arduino_ide_conversion.bash ihm main.cpp
+            
+            - name: Changement de branche
+              run: |
+                  git fetch --all
+                  git switch arduino_ide_version -f
+            
+            - name: Suppression des fichiers inutiles pour garder uniquement ceux de ArduinoIDE
+              run: |
+                  cd IhmArduino
+                  find . -mindepth 1 -maxdepth 1 ! -name "ihm" -exec rm -rf {} +
+                  mv ihm/* .
+                  rm -rf ihm
+                  mv ihm.ino IhmArduino.ino
+
+            - name: Commit et push
+              run: |
+                  git add .
+                  if git diff-index --quiet HEAD --; then
+                    echo "No changes to commit"
+                  else
+                    git commit -m "${{ github.event.head_commit.message }}"
+                    git push -f || true
+                  fi
+           
