@@ -4,9 +4,6 @@
 #include <MPS.h>
 #include "config.h"
 
-
-
-
 // ---- Structures de payload ----
 // placer ici vos structures de payloads, par exemple :
 // struct __attribute__((packed)) SomePayload { // __attribute__((packed)) permet de contrôler la disposition des octets de celle-ci
