@@ -37,7 +37,7 @@ struct __attribute__((packed)) TemperatureHumidityPayload {
 static_assert(sizeof(TemperatureHumidityPayload) == 8, "TemperatureHumidityPayload = 8 octets");
 
 
-DHT dht(DHTPIN, DHTTYPE);
+// DHT dht(DHTPIN, DHTTYPE);
 
 static CounterPayload counter = {0};
 
