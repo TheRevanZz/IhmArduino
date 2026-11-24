@@ -5,6 +5,7 @@
 #include "Controllers/HeartbeatController.h"
 #include "Controllers/LedController.h"
 #include "Controllers/ControllerManager.h"
+#include "Controllers/TemperatureHumidityController.h"
 
 // ---- Structures de payload ----
 // placer ici vos structures de payloads, par exemple :
@@ -13,7 +14,7 @@
 //   int16_t someVariableB;
 // };
 
-ControllerManager controllerManager{ new CounterController(), new HeartbeatController(), new LedController() };
+ControllerManager controllerManager{ new CounterController(), new HeartbeatController(), new LedController(), new TemperatureHumidityController() };
 // ---- Subjects ----
 // ... ajoutez vos sujets ici sur le même schéma que le heartbeat, mais en précisant la donnée envoyée,
 // par exemple : `constexpr mps::Subject kSubStatusSomeData = mps::makeSubject("status_" DEVICE_NAME "_some_data");`

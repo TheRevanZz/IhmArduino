@@ -4,6 +4,7 @@ extends Tile
 const DEVICE_NAME = "sensor_d"
 const SUB_HB = "hb_" + DEVICE_NAME
 const SUB_COUNTER = "status_" + DEVICE_NAME + "_counter"
+const SUB_TEMPERATURE_Humidity = "status_" + DEVICE_NAME + "_temperature_humdity"
 const SUB_SET_LIGHT_COLOR = "set_" + DEVICE_NAME + "_light_color"
 const SUB_STATUS_LIGHT_COLOR = "status_" + DEVICE_NAME + "_light_color"
 const SUB_SET_SWITCH_THRESHOLD = "set_" + DEVICE_NAME + "_switch_threshold"
@@ -41,6 +42,7 @@ func get_subscriptions() -> PackedStringArray:
 	var subscriptions: PackedStringArray = []
 	subscriptions.append(SUB_HB)
 	subscriptions.append(SUB_COUNTER)
+	subscriptions.append(SUB_TEMPERATURE_Humidity)
 	return subscriptions
 
 
@@ -69,6 +71,7 @@ func on_message(subject_name: String, source_id: int, _payload: PackedByteArray)
 	if subject_name == SUB_COUNTER: _on_counter(_payload)
 	if subject_name == SUB_STATUS_LIGHT_COLOR: _on_light_color(_payload)
 	if subject_name == SUB_STATUS_SWITCH_THRESHOLD: _on_switch_threshold(_payload)
+	if subject_name == SUB_TEMPERATURE_Humidity: _on_temperature_humidity(_payload)
 
 
 func _on_counter(_payload : PackedByteArray):
@@ -77,6 +80,13 @@ func _on_counter(_payload : PackedByteArray):
 func _on_switch_threshold(_payload : PackedByteArray):
 	var value = _payload.decode_u8(0)
 	%SliderLabel.update_slider_value(value)
+func _on_temperature_humidity(_payload : PackedByteArray):
+	var temp: float = _payload.get(0);
+	var hum: float = _payload.get(1);
+	%TemperatureLabel.text = "Temperature: " + str(temp / 10) + "°C"
+	%HumidityLabel.text = "Humidité: " + str(hum / 10) + "%"
+	#var test = _payload.get(0);
+	#print(test);
 
 func _process(delta: float) -> void:
 	_seconds_since_hb += delta

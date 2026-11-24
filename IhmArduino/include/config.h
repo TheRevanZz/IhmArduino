@@ -14,6 +14,9 @@ constexpr uint8_t kWifiChannel = 8; // Canal wifi de la passerelle
 
 #define PREFIX_SUBJECT "kSub"
 
+#define DHTPIN 0
+#define DHTTYPE DHT11
+
 using Color_t = uint8_t[3];
 
 inline std::array<Color_t,33> colors = {{

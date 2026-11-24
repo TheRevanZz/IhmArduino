@@ -111,10 +111,10 @@ offset_bottom = 213.0
 [node name="TemperatureLabel" type="Label" parent="." unique_id=1415748674]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 23.0
-offset_top = 245.0
-offset_right = 154.0
-offset_bottom = 268.0
+offset_left = 30.0
+offset_top = 226.0
+offset_right = 161.0
+offset_bottom = 249.0
 text = "Température : 0°"
 
 [node name="SliderContainer" type="HBoxContainer" parent="." unique_id=868038130]
@@ -144,6 +144,15 @@ text = "ok"
 horizontal_alignment = 3
 vertical_alignment = 3
 script = ExtResource("8_15dvh")
+
+[node name="HumidityLabel" type="Label" parent="." unique_id=591850594]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 260.0
+offset_right = 159.0
+offset_bottom = 283.0
+text = "Humidité : 0%"
 
 [connection signal="toggled" from="LightPowerButton" to="." method="_on_light_power_button_toggled"]
 [connection signal="color_changed" from="ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]
