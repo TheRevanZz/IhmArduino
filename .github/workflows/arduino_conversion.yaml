@@ -24,7 +24,7 @@ jobs:
             - name: Creation de l'équivalent Arduino IDE
               run: |
                   mkdir save_godot
-                  cp -r Godot/* save_godot/*
+                  cp -r Godot/. save_godot/
                   cd IhmArduino
                   chmod +x arduino_ide_conversion.bash
                   ./arduino_ide_conversion.bash ihm main.cpp
