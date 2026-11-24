@@ -1,4 +1,5 @@
 #include "LedController.h"
+#include <MPS.h>
 
 LedController::LedController()
 	: ledDataPayload{
@@ -101,7 +102,7 @@ void LedController::lightControl()
 				if (colorCursor == 0)
 					colorCursor = 1;
 				if (!valid)
-					return;
+					colorCursor = 1;
 			}
 			else
 			{
@@ -111,7 +112,6 @@ void LedController::lightControl()
 			holdingButton = false;
 			ignoreNextButtonRelease = true;
 		}
-
 	}
 	else if (!buttonPressed && holdingButton)
 	{
