@@ -27,6 +27,8 @@ const HB_BLINK_S := 0.5
 
 var count = 0;
 
+signal disconnect
+
 # ---- VARIABLES ----
 var _node_id: int = -1
 var _seconds_since_hb := INF
@@ -39,6 +41,7 @@ var _connected: bool = false:
 			_on_sensor_connected()
 		else:
 			_on_sensor_disconnected()
+			disconnect.emit()
 			
 
 #func _ready() -> void:
@@ -92,10 +95,10 @@ func _on_switch_threshold(_payload : PackedByteArray):
 	%SliderLabel.update_slider_value(value)
 	
 func _on_temperature_humidity(_payload : PackedByteArray):
-	var temp: float = _payload.get(0);
-	var hum: float = _payload.get(1);
-	%TemperatureLabel.text = "Temperature: " + str(temp / 10) + "°C"
-	%HumidityLabel.text = "Humidité: " + str(hum / 10) + "%"
+	var temp: float = snappedf(_payload.decode_float(0),0.01)
+	var hum: float = snappedf(_payload.decode_float(4),0.01)
+	%TemperatureLabel.text = "Temperature: " + str(temp) + "°C"
+	%HumidityLabel.text = "Humidité: " + str(hum) + "%"
 	#var test = _payload.get(0);
 	#print(test);
 
@@ -110,11 +113,20 @@ func _on_sensor_connected():
 	_on_light_power_button_toggled(false)
 	%IDLabel.text = "node_id: %d" % _node_id
 	%ConnectedIcon.state = true
+	%LightPowerButton.disabled = false
+	%ColorPickerButton.disabled = false
+	%SwitchDelaySlider.editable = true
 
 
 func _on_sensor_disconnected():
 	%IDLabel.text = "node_id: ∅"
 	%ConnectedIcon.state = false
+	%LightPowerButton.disabled = true
+	%ColorPickerButton.disabled = true
+	%TemperatureLabel.text = "Temperature: ∅"
+	%HumidityLabel.text = "Humidité: ∅"
+	%SwitchDelaySlider.editable = false
+	%SliderLabel.text = "∅"
 
 ## @brief Traite un heartbeat : (re)connecte le capteur et relance la temporisation.
 ## @param source_id  Identifiant de l'appareil émetteur.
@@ -170,8 +182,6 @@ func _on_light_color(_payload : PackedByteArray) -> void:
 		%LightPowerButton.button_pressed = true
 
 	
-
-
 func _on_switch_delay_slider_value_changed(value: float) -> void:
 	var payload = PackedByteArray([value])
 	%SliderLabel.update_slider_value(value)
