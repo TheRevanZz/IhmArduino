@@ -4,10 +4,22 @@ extends Tile
 const DEVICE_NAME = "sensor_d"
 const SUB_HB = "hb_" + DEVICE_NAME
 const SUB_COUNTER = "status_" + DEVICE_NAME + "_counter"
+const SUB_TEMPERATURE_HUMIDITY = "status_" + DEVICE_NAME + "_temperature_humidity"
 const SUB_SET_LIGHT_COLOR = "set_" + DEVICE_NAME + "_light_color"
 const SUB_STATUS_LIGHT_COLOR = "status_" + DEVICE_NAME + "_light_color"
 const SUB_SET_SWITCH_THRESHOLD = "set_" + DEVICE_NAME + "_switch_threshold"
 const SUB_STATUS_SWITCH_THRESHOLD = "status_" + DEVICE_NAME + "_switch_threshold"
+
+const SUBS = [
+	SUB_HB, 
+	SUB_COUNTER, 
+	SUB_TEMPERATURE_HUMIDITY, 
+	SUB_SET_LIGHT_COLOR, 
+	SUB_STATUS_LIGHT_COLOR, 
+	SUB_SET_SWITCH_THRESHOLD,
+	SUB_STATUS_SWITCH_THRESHOLD
+]
+
 ## Délai sans heartbeat au-delà duquel le capteur est considéré comme bloqué (3,5 périodes de 1 s).
 const HB_TIMEOUT_S := 3.5
 ## Durée d'allumage de l'icône de heartbeat à chaque réception.
@@ -39,8 +51,8 @@ func _notification(what: int) -> void:
 
 func get_subscriptions() -> PackedStringArray:
 	var subscriptions: PackedStringArray = []
-	subscriptions.append(SUB_HB)
-	subscriptions.append(SUB_COUNTER)
+	for sub in SUBS:
+		subscriptions.append(sub);
 	return subscriptions
 
 
@@ -63,12 +75,13 @@ func on_gateway_reachability_changed(is_gateway_reachable: bool) -> void:
 
 
 func on_message(subject_name: String, source_id: int, _payload: PackedByteArray) -> void:
+	print(subject_name)
 	if subject_name == SUB_HB: _on_hb(source_id)
 	if source_id != _node_id: return # ne traitez que les messages dédiés à votre capteur
-	# Ajoutez vos messages à la suite
 	if subject_name == SUB_COUNTER: _on_counter(_payload)
 	if subject_name == SUB_STATUS_LIGHT_COLOR: _on_light_color(_payload)
 	if subject_name == SUB_STATUS_SWITCH_THRESHOLD: _on_switch_threshold(_payload)
+	if subject_name == SUB_TEMPERATURE_HUMIDITY: _on_temperature_humidity(_payload)
 
 
 func _on_counter(_payload : PackedByteArray):
@@ -77,6 +90,14 @@ func _on_counter(_payload : PackedByteArray):
 func _on_switch_threshold(_payload : PackedByteArray):
 	var value = _payload.decode_u8(0)
 	%SliderLabel.update_slider_value(value)
+	
+func _on_temperature_humidity(_payload : PackedByteArray):
+	var temp: float = _payload.get(0);
+	var hum: float = _payload.get(1);
+	%TemperatureLabel.text = "Temperature: " + str(temp / 10) + "°C"
+	%HumidityLabel.text = "Humidité: " + str(hum / 10) + "%"
+	#var test = _payload.get(0);
+	#print(test);
 
 func _process(delta: float) -> void:
 	_seconds_since_hb += delta
@@ -137,6 +158,7 @@ func _on_color_picker_button_color_changed(color: Color) -> void:
 	publish(SUB_SET_LIGHT_COLOR, payload, true)
 	
 func _on_light_color(_payload : PackedByteArray) -> void:
+	print("receive color")
 	var r := _payload.decode_u8(0) / 255.0
 	var g := _payload.decode_u8(1) / 255.0
 	var b := _payload.decode_u8(2) / 255.0
@@ -152,4 +174,5 @@ func _on_light_color(_payload : PackedByteArray) -> void:
 
 func _on_switch_delay_slider_value_changed(value: float) -> void:
 	var payload = PackedByteArray([value])
+	%SliderLabel.update_slider_value(value)
 	publish(SUB_SET_SWITCH_THRESHOLD, payload, true)
