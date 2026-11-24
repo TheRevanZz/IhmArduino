@@ -45,7 +45,8 @@ jobs:
             - name: Suppression de l'ancien contenu Godot
               run: |
                   rm -rf Godot
-                  mv save_godot/* ./Godot/*
+                  mkdir Godot
+                  mv save_godot/. ./Godot/
 
             - name: Commit et push
               run: |
