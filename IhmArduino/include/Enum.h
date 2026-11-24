@@ -63,22 +63,22 @@ constexpr auto makeSubjectName(
 
     size_t i = 0;
 
-    auto append = [&](std::string_view str)
+    auto append = [&](std::string_view str, bool lower = true)
     {
         for (char c : str)
         {
             if (i < MaxSize - 1)
-                result[i++] = toLower(c);
+                result[i++] = lower ? toLower(c) : c;
         }
     };
 
     append(type);
-    append("_");
+    append("_", false);
     append(device);
 
     if (!suffix.empty())
     {
-        append("_");
+        append("_",false);
         append(suffix);
     }
 
