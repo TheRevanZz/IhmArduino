@@ -15,8 +15,10 @@ content_margin_bottom = 1.0
 [node name="TileSensorDemo" type="Panel" unique_id=304170558]
 custom_minimum_size = Vector2(336, 336)
 custom_maximum_size = Vector2(336, 336)
-offset_right = 360.0
-offset_bottom = 240.0
+offset_left = 57.0
+offset_top = 102.0
+offset_right = 393.0
+offset_bottom = 438.0
 mouse_filter = 2
 theme_override_styles/panel = ExtResource("1_lf8ud")
 script = ExtResource("2_y03qy")
