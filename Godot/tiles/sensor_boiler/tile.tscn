@@ -140,7 +140,6 @@ allow_greater = true
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
-text = "ok"
 horizontal_alignment = 3
 vertical_alignment = 3
 script = ExtResource("8_15dvh")

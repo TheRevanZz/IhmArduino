@@ -80,6 +80,7 @@ func _on_counter(_payload : PackedByteArray):
 func _on_switch_threshold(_payload : PackedByteArray):
 	var value = _payload.decode_u8(0)
 	%SliderLabel.update_slider_value(value)
+	
 func _on_temperature_humidity(_payload : PackedByteArray):
 	var temp: float = _payload.get(0);
 	var hum: float = _payload.get(1);
