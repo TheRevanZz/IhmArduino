@@ -4,8 +4,8 @@
 #include <array>
 #include <MPS.h>
 
-static const uint8_t kGatewayMacAddress[6] = {0xF8,0x5B,0x1B,0x05,0x71,0xB4}; // Adresse de la passerelle (écriture hexadécimale)
-constexpr uint8_t kWifiChannel = 7; // Canal wifi de la passerelle
+static const uint8_t kGatewayMacAddress[6] = {0x88,0x56,0xA6,0x7E,0x24,0x18}; // Adresse de la passerelle (écriture hexadécimale)
+constexpr uint8_t kWifiChannel = 8; // Canal wifi de la passerelle
 
 #define DEVICE_NAME "sensor_d" // modifiez cette valeur avec le nom de votre capteur (sensor_<groupe>), ex : "sensor_a"
 
@@ -13,6 +13,9 @@ constexpr uint8_t kWifiChannel = 7; // Canal wifi de la passerelle
 #define LED 2
 
 #define PREFIX_SUBJECT "kSub"
+
+#define DHTPIN 0
+#define DHTTYPE DHT11
 
 using Color_t = uint8_t[3];
 
