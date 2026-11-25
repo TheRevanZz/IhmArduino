@@ -6,7 +6,7 @@
 #include "Helpers/SubjectHelper.h"
 #include "config.h"
 
-// Status utilisé pour indiqué à l'IHM que le compteur a changer
+// Subject permettant d'envoyer la température et l'humidité à Godot
 CREATE_SUBJECT(kSubStatusTemperatureHumidity, temperature_humidity)
 
 inline DHT dht(DHTPIN, DHTTYPE);
@@ -15,6 +15,7 @@ class TemperatureHumidityController : public BaseController
 {
 
 public:
+    // Contient les données concernant la température et l'humidité
     struct __attribute__((packed)) TemperatureHumidityPayload
     {
         float temperature;

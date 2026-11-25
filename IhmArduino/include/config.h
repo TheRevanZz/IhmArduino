@@ -4,21 +4,38 @@
 #include <array>
 #include <MPS.h>
 
-static const uint8_t kGatewayMacAddress[6] = {0x88,0x56,0xA6,0x7E,0x24,0x18}; // Adresse de la passerelle (écriture hexadécimale)
-constexpr uint8_t kWifiChannel = 8; // Canal wifi de la passerelle
+/// @brief Adresse MAC de la passerelle MPS à laquelle le nœud doit se connecter.
+/// Les octets sont écrits au format hexadécimal.
+static const uint8_t kGatewayMacAddress[6] = {0x88,0x56,0xA6,0x7E,0x24,0x18};
 
-#define DEVICE_NAME "sensor_d" // modifiez cette valeur avec le nom de votre capteur (sensor_<groupe>), ex : "sensor_a"
+/// @brief Canal Wi-Fi utilisé par la passerelle MPS.
+constexpr uint8_t kWifiChannel = 8;
 
+/// @brief Nom du nœud enregistré auprès de la passerelle MPS.
+/// Modifier cette valeur pour adapter le nom du capteur, par exemple
+/// "sensor_a", "sensor_b", etc.
+#define DEVICE_NAME "sensor_d"
+
+/// @brief Broche Arduino utilisée pour le bouton matériel.
 #define G3_BUTTON 3
+
+/// @brief Broche Arduino utilisée pour piloter la LED.
 #define LED 2
 
+/// @brief Préfixe commun aux noms de variables représentant des subjects MPS.
 #define PREFIX_SUBJECT "kSub"
 
+/// @brief Broche connectée au capteur DHT.
 #define DHTPIN 0
+
+/// @brief Modèle de capteur DHT utilisé.
 #define DHTTYPE DHT11
 
+/// @brief Valeur RGB représentée par trois octets : rouge, vert et bleu.
 using Color_t = uint8_t[3];
 
+/// @brief Palette de couleurs disponibles pour la LED.
+/// Chaque entrée contient les composantes RGB dans l'ordre rouge, vert, bleu.
 inline std::array<Color_t,33> colors = {{
     {0,0,0},
     {255,   66,   0}, // Rou3ge
