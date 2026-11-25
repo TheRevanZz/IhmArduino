@@ -18,6 +18,7 @@ class LedController : public BaseController
 {
 
 public:
+	/// @brief Constructeur de la classe LedController
 	LedController();
 
 	// Contient les données concernant la lumière
@@ -49,18 +50,37 @@ private:
 	uint16_t switchLightThresholdMs = 5000;
 	bool ignoreNextButtonRelease = false;
 
+	/// @brief Action à effectuer lors de la réception d'un message pour changer la couleur de la led
+	/// @param message Message contenant la nouvelle couleur de la led
 	void onSetLightColor(const mps::FrameView &message);
+	/// @brief Action à effectuer lors de la réception d'un message pour changer le seuil de basculement
+	/// @param message Message contenant le nouveau seuil de basculement
 	void onSetSwitchThreshold(const mps::FrameView &message);
+	/// @brief Publie les données de la led
 	void publishPayload();
+	/// @brief Change la couleur de la led
+	/// @param color Tableau contenant les valeurs RGB de la nouvelle couleur
 	void changeLedColor(const uint8_t color[3]);
+	/// @brief Change le seuil de basculement
+	/// @param threshold Nouveau seuil de basculement
 	void changeSwitchThreshold(uint8_t threshold);
 
+	/// @brief Gère le contrôle de la led
 	void lightControl();
+	/// @brief Récupère l'index d'une couleur dans le tableau des couleurs
+	/// @param color Tableau contenant les valeurs RGB de la couleur à rechercher
+	/// @param valid Référence vers un booléen indiquant si la couleur est valide
+	/// @return Index de la couleur dans le tableau des couleurs
 	uint8_t getColorIndex(uint8_t color[3], bool &valid);
+	/// @brief Met à jour le champ de couleur
+	/// @param color Tableau contenant les valeurs RGB de la nouvelle couleur
 	void updateColorField(const uint8_t color[3]);
 
 public:
+	/// @brief Met à jour le contrôleur
 	virtual void update() override;
+	/// @brief Initialise le contrôleur
 	virtual void setup() override;
+	/// @brief Action à effectuer lors de l'ouverture de la session MPS
 	virtual void onSessionOpened() override;
 };

@@ -7,26 +7,13 @@
 #include "ControllerManager.h"
 #include "TemperatureHumidityController.h"
 
-// ---- Structures de payload ----
-// placer ici vos structures de payloads, par exemple :
-// struct __attribute__((packed)) SomePayload { // __attribute__((packed)) permet de contrôler la disposition des octets de celle-ci
-//   uint8_t someVariableA;
-//   int16_t someVariableB;
-// };
-
 ControllerManager controllerManager{
     new CounterController(),
     new HeartbeatController(),
     new LedController(),
     new TemperatureHumidityController()
   };
-// ---- Subjects ----
-// ... ajoutez vos sujets ici sur le même schéma que le heartbeat, mais en précisant la donnée envoyée,
-// par exemple : `constexpr mps::Subject kSubStatusSomeData = mps::makeSubject("status_" DEVICE_NAME "_some_data");`
-// ou : `constexpr mps::Subject kSubCmdSomeOrder = mps::makeSubject("cmd_" DEVICE_NAME "_some_order");`
 
-// ---- Callbacks ----
-// Appelé lors de l'ouverture de la session (callback)
 static void onSessionOpened()
 {
   Serial.println("Session opened!");
@@ -52,8 +39,6 @@ void setup()
   // enregistrement des callbacks
   MPS.setRegisteredCallback(onSessionOpened);
   MPS.setSendFailedCallback(onSendFailed);
-  // MPS.on(kSubStatusCounter, )
-  // ... ajoutez vos callbacks à l'aide de MPS.on(const mps::Subject& subject, mps::MessageHandler handler, void* userContext = nullptr)
 
   controllerManager.setup();
 
