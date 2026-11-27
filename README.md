@@ -1,3 +1,9 @@
+## Setup
+Le projet contient 2 tags: 
+- Liv-1: le code correspondant au livrable 1
+- Liv-2: le code correspondant au livrable 2 <br>
+  Le livrable 2 est sous forme classique Arduino (branch: arduino_ide_version) et sous forme utilisable avec Visual Studio Code (branch: main)
+
 ## Subjects :
 - ``status_sensor_d_counter``<br>
 Ce subject permet d'indiquer que le compteur a changé. Le payload contient un ``uint32_t`` et fait 4 octets.
